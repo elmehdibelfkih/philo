@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/06/07 20:42:50 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/10 23:57:48 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,42 +28,39 @@
 # include <pthread.h>
 # include <time.h>
 
-typedef struct s_vars {
+typedef struct s_philo
+{
+	short int		id;
+	long long		start_date;
+	long long		last_eat;
+	int				nb_eat;
+	pthread_t		philo;
+	pthread_mutex_t	*right_fork_mutex;
+	pthread_mutex_t	*left_fork_mutex;
+	struct s_vars	*data;
+}				t_philo;
 
-	int				nb_of_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				nb_of_eat;
-	int				*forks;
-	pthread_t		*philo;
-	int				*eat_counter;
-	// int		dead;
-	// int		*last_eat;
-	// int		*is_eating;
-	// int		start;
-	// pthread_mutex_t	*mutex;
-	// pthread_mutex_t	print;
-	// pthread_mutex_t	dead_mutex;
-	// pthread_mutex_t	*fork_mutex;
-	// pthread_t		monitor;
+typedef struct s_vars 
+{
+	long long	nb_of_philo;
+	long long	nb_of_eat;
+	long long	time_to_die;
+	long long	time_to_eat;
+	long long	time_to_sleep;
+	t_philo		*philos;  
+	pthread_mutex_t	*fork_mutex;
+	short int	i;
+	short int	j;
+	short int	x;
+	short int	y;
 }				t_vars;
-
-typedef struct s_l_vars {
-
-	int		i;
-	int		j;
-	int		x;
-	int		y;
-	int		z;
-}				t_l_vars;
 
 
 int		exit_message(t_vars *m, int i);
 int		ft_isdigit(int c);
 int		ft_atoi(const char *str);
-int		read_input(t_vars *vars, t_l_vars *l, char **av);
-int		init_data(t_vars *vars, t_l_vars *l);
-int		ft_clear(char **spl, int p);
+int		read_input(t_vars *vars, char **av);
+int		init_data(t_vars *vars);
+long long c_time(void);
 
 #endif

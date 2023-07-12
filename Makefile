@@ -6,7 +6,7 @@
 #    By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 03:53:38 by ebelfkih          #+#    #+#              #
-#    Updated: 2023/06/07 02:36:39 by ebelfkih         ###   ########.fr        #
+#    Updated: 2023/07/10 15:45:13 by ebelfkih         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ MAIN = main/philo.c
 CC = cc -Wall -Werror -Wextra
 RM = @rm -f
 AR = @ar rc
-FILES = main/philo.c code/parsing.c code/utils1.c 
-OBJ = $(FILES:.c=.o)
+FILES = main/philo.c code/parcing.c code/utils1.c 
+OBJ = $(FILES:.c=.o) 
 
 RED = \033[0;31m
 GREEN = \033[0;32m
