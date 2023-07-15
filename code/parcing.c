@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:20:58 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/11 00:23:02 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/15 05:12:38 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,40 @@ int	init_data(t_vars *vars)
 		return (0);
 	if (!(vars->philos = malloc(sizeof(t_philo) * vars->nb_of_philo)))
 		return (free(vars->philos), 0);
-		
 	if (!(vars->fork_mutex = malloc(sizeof(pthread_mutex_t) * vars->nb_of_philo)))
 		return (free(vars->fork_mutex), free(vars->philos), 0);
+	vars->x = -1;
+	while (++vars->x < vars->nb_of_philo)
+		pthread_mutex_init(&vars->fork_mutex[vars->x], NULL);
+	pthread_mutex_init(&vars->mutex, NULL);
 	vars->x = 0;
 	while (vars->x < vars->nb_of_philo)
 	{
+		vars->philos[vars->x].data = vars;
 		vars->philos[vars->x].id = vars->x + 1;
-    	vars->philos[vars->x].start_date = c_time();
     	vars->philos[vars->x].last_eat = c_time();
     	vars->philos[vars->x].nb_eat = 0;
+		vars->philos[vars->x].state = 0;
 		vars->x++;
 	}
 	return (1);
+}
+
+void mu_lock(int lu, int id, t_vars *vars)
+{
+	if (lu == 1)
+	{
+		pthread_mutex_lock(&vars->fork_mutex[id - 1]);
+		if (id == vars->nb_of_philo - 1)
+			pthread_mutex_lock(&vars->fork_mutex[0]);
+		else
+			pthread_mutex_lock(&vars->fork_mutex[id]);
+		return ;
+	}
+	pthread_mutex_unlock(&vars->fork_mutex[id - 1]);
+	if (id == vars->nb_of_philo - 1)
+		pthread_mutex_unlock(&vars->fork_mutex[0]);
+	else
+		pthread_mutex_unlock(&vars->fork_mutex[id]);
+	return ;
 }
