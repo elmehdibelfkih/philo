@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:58:52 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/15 05:28:32 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/16 04:32:23 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,25 @@ unsigned long long c_time(void)
 
 void *routine(void *arg)
 {
-    t_philo p;
+    t_philo *philosopher;
 
-    p = *(t_philo *)arg;
-    if (!p.id%2)
-    {
+    philosopher = &(*(t_philo *)arg);
+    if (!(philosopher->id%2))
         usleep(100);
-    }
     while (1) 
-        activities(&p);
+    {
+        mu_lock(1, philosopher->id, philosopher->data);
+	    philosopher->last_eat = c_time();
+	    printf("%lld philo %d has taken a fork\n", (c_time() - philosopher->data->start_time), philosopher->id);
+	    printf("%lld philo %d has taken a fork\n", (c_time() - philosopher->data->start_time), philosopher->id);
+	    philosopher->nb_eat += 1;
+	    printf("%lld philo %d is eating\n", (c_time() - philosopher->data->start_time), philosopher->id);
+	    ft_usleep(philosopher->data->time_to_eat);
+        mu_lock(0, philosopher->id, philosopher->data);
+	    printf("%lld philo %d is sleeping\n",(c_time() - philosopher->data->start_time), philosopher->id);
+	    ft_usleep(philosopher->data->time_to_sleep);
+        printf("%lld philo %d is thinking\n",(c_time() - philosopher->data->start_time), philosopher->id);
+    }
     return (arg);
 }
 
@@ -46,50 +56,47 @@ void	ft_usleep(unsigned int t)
 
 void	activities(t_philo *philosopher)
 {
-    // pthread_mutex_lock(&philosopher->data->mutex);
-    // if (philosopher->id%2)
-    // {
-    //     usleep(200);
-    // }
 	mu_lock(1, philosopher->id, philosopher->data);
-	printf("%lld philo %d has taken a fork\n", c_time() - philosopher->data->start_date, philosopher->id);
-	printf("%lld philo %d has taken a fork\n", c_time() - philosopher->data->start_date, philosopher->id);
-	philosopher->state = 1;
-	philosopher->nb_eat += 1;
-	printf("%lld philo %d is eating\n", c_time() - philosopher->data->start_date, philosopher->id);
+    printf("%lld | %lld \n", philosopher->data->time_to_eat, philosopher->data->time_to_sleep);
+	printf("%lld philo %d has taken a fork\n", (c_time() - philosopher->data->start_time), philosopher->id);
+	printf("%lld philo %d has taken a fork\n", (c_time() - philosopher->data->start_time), philosopher->id);
 	philosopher->last_eat = c_time();
+	philosopher->nb_eat += 1;
+	printf("%lld philo %d is eating\n", (c_time() - philosopher->data->start_time), philosopher->id);
 	ft_usleep(philosopher->data->time_to_eat);
     mu_lock(0, philosopher->id, philosopher->data);
-    // pthread_mutex_unlock(&philosopher->data->mutex);
-	philosopher->state = 0;
-	// if (philosopher->eat_number >= philosopher->arg->nb_must_eat
-	// 	&& philosopher->arg->nb_must_eat != 0)
-	// 	return ;
-	printf("%lld philo %d is sleeping\n",c_time() - philosopher->data->start_date, philosopher->id);
+	printf("%lld philo %d is sleeping\n",(c_time() - philosopher->data->start_time), philosopher->id);
 	ft_usleep(philosopher->data->time_to_sleep);
-    printf("%lld philo %d is thinking\n",c_time() - philosopher->data->start_date, philosopher->id);
+    printf("%lld philo %d is thinking\n",(c_time() - philosopher->data->start_time), philosopher->id);
 }
 
 int creat_philos(t_vars *vars)
 {
     int i;
 
-    i = 0;
-    vars->start_date = c_time();
-    while (i < vars->nb_of_philo)
-    {
+    i = -1;
+    while (++i < vars->nb_of_philo)
         pthread_create(&vars->philos[i].philo, NULL, &routine, &vars->philos[i]);
-        ft_usleep(2);
-        i++;
-    }
-    i = 0;
-    while (i < vars->nb_of_philo)
+    return (1);
+}
+
+int who_died(t_vars *vars)
+{
+    vars->x = 0;
+    while (vars->x < vars->nb_of_philo)
     {
-        pthread_join(vars->philos[i].philo, NULL);
-        i++;
+        if ((vars->philos[vars->x].last_eat + vars->time_to_die) < (c_time()))
+        {
+            // printf("dead%lld\n",vars->philos[vars->x].last_eat );
+            // printf("dead b nakis %lld\n", c_time() - vars->philos[vars->x].last_eat);
+            // printf("dead%lld\n",c_time());
+            printf("%lld philo %d died\n", c_time() - vars->start_time ,vars->philos[vars->x].id);
+            return  0;
+        }  
+        vars->x++;
+        usleep(100);
     }
-    return 1;
-    
+    return (1);      
 }
 
 int main(int ac, char **av)
@@ -100,6 +107,9 @@ int main(int ac, char **av)
     if ((ac != 5 && ac != 6) || !read_input(&vars, av))
         return (exit_message(&vars, 0));
     creat_philos(&vars);
+    while (who_died(&vars));
+      
+    
 
 }
 

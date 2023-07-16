@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/15 05:23:50 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/16 04:00:57 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ typedef struct s_philo
 
 typedef struct s_vars 
 {
-	unsigned long long	start_date;
 	unsigned short int	nb_of_philo;
 	unsigned int		nb_of_eat;
 	unsigned long long	time_to_die;
 	unsigned long long	time_to_eat;
 	unsigned long long	time_to_sleep;
+	unsigned long long	start_time;
 	t_philo		*philos;  
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	mutex;
