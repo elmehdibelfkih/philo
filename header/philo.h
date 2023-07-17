@@ -6,18 +6,12 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/16 04:00:57 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/17 01:48:07 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# define TAKE_FORKS "has taken a fork"
-# define THINKING "is thinking"
-# define SLEEPING "is sleeping"
-# define EATING "is eating"
-# define DIED "died"
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -41,7 +35,7 @@ typedef struct s_philo
 typedef struct s_vars 
 {
 	unsigned short int	nb_of_philo;
-	unsigned int		nb_of_eat;
+	int		nb_of_eat;
 	unsigned long long	time_to_die;
 	unsigned long long	time_to_eat;
 	unsigned long long	time_to_sleep;
@@ -49,6 +43,7 @@ typedef struct s_vars
 	t_philo		*philos;  
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	print;
 	short int	i;
 	short int	j;
 	short int	x;
@@ -67,4 +62,5 @@ void	activities(t_philo *philosopher);
 void	ft_usleep(unsigned int t);
 void *routine(void *arg);
 void mu_lock(int lu, int id, t_vars *vars);
+void m_free(t_vars *vars);
 #endif

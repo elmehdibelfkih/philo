@@ -6,14 +6,17 @@
 #    By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 03:53:38 by ebelfkih          #+#    #+#              #
-#    Updated: 2023/07/10 15:45:13 by ebelfkih         ###   ########.fr        #
+#    Updated: 2023/07/17 06:47:45 by ebelfkih         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 ONAME = functions.a 
 MAIN = main/philo.c
-CC = cc -Wall -Werror -Wextra
+
+CC = cc -Wall -Werror -Wextra -fsanitize=thread TSAN_OPTIONS=second_deadlock_stack=1
+#CC = cc -Wall -Werror -Wextra -fsanitize=address
+
 RM = @rm -f
 AR = @ar rc
 FILES = main/philo.c code/parcing.c code/utils1.c 
