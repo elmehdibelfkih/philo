@@ -6,23 +6,11 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:23:50 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/06/07 20:07:05 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 03:02:28 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
-
-int	exit_message(t_vars *m, int i)
-{
-	printf("error : %d\n", i);
-	if (i == 0 || i == 1 || i == 2)
-	{
-		
-	}
-	
-    (void)m;
-	return (i);
-}
 
 int	ft_isdigit(int c)
 {
