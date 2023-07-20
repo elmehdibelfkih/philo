@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 06:03:13 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 22:31:54 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <time.h>
+# include <limits.h>
 
 typedef struct s_philo
 {
 	short int		id;
+	short int		st;
 	long long		last_eat;
 	int				nb_eat;
 	pthread_t		philo;
@@ -34,9 +36,9 @@ typedef struct s_vars
 {
 	unsigned short int	n_philo;
 	int					nb_of_eat;
-	unsigned long long	time_to_die;
-	unsigned long long	time_to_eat;
-	unsigned long long	time_to_sleep;
+	unsigned long long	t_die;
+	unsigned long long	t_eat;
+	unsigned long long	t_sleep;
 	unsigned long long	s_t;
 	t_philo				*philos;
 	pthread_mutex_t		*fork_mutex;

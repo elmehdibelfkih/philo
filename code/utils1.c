@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:23:50 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 04:16:59 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 21:27:13 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ void	m_free(t_vars *vars)
 	vars->x = -1;
 	while (++vars->x < vars->n_philo)
 		pthread_mutex_destroy(&vars->fork_mutex[vars->x]);
+	pthread_mutex_destroy(&vars->mutex);
+	pthread_mutex_destroy(&vars->print);
+	pthread_mutex_destroy(&vars->death);
 	free (vars->philos);
 	free (vars->fork_mutex);
 	vars->x = -1;

@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:58:52 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 06:05:02 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 22:34:50 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*routine(void *arg)
 		pthread_mutex_lock(&p->data->print);
 		printf("%lld philo %d is sleeping\n", (c_t() - p->data->s_t), p->id);
 		pthread_mutex_unlock(&p->data->print);
-		if (ft_usleep(p->data->time_to_sleep, p->data) == 0)
+		if (ft_usleep(p->data->t_sleep, p->data) == 0)
 			return (arg);
 		pthread_mutex_lock(&p->data->print);
 		printf("%lld philo %d is thinking\n", (c_t() - p->data->s_t), p->id);
@@ -49,19 +49,22 @@ int	eat(t_philo *p)
 	pthread_mutex_unlock(&p->data->mutex);
 	pthread_mutex_lock(&p->data->print);
 	printf("%lld philo %d has taken a fork\n", (c_t() - p->data->s_t), p->id);
-	pthread_mutex_unlock(&p->data->print);
-	pthread_mutex_lock(&p->data->print);
 	printf("%lld philo %d has taken a fork\n", (c_t() - p->data->s_t), p->id);
-	pthread_mutex_unlock(&p->data->print);
-	pthread_mutex_lock(&p->data->print);
 	printf("%lld philo %d is eating\n", (c_t() - p->data->s_t), p->id);
 	pthread_mutex_unlock(&p->data->print);
-	if (ft_usleep(p->data->time_to_eat, p->data) == 0)
+	if (ft_usleep(p->data->t_eat, p->data) == 0)
 	{
 		f_lock(0, p->id, p->data);
 		return (0);
 	}
 	f_lock(0, p->id, p->data);
+	pthread_mutex_lock(&p->data->mutex);
+	if (p->nb_eat == p->data->nb_of_eat)
+	{
+		p->st = 1;
+		return (pthread_mutex_unlock(&p->data->mutex), 0);
+	}
+	pthread_mutex_unlock(&p->data->mutex);
 	return (1);
 }
 
@@ -74,9 +77,9 @@ int	who_died(t_vars *vars)
 	{
 		c = 0;
 		pthread_mutex_lock(&vars->mutex);
-		if (vars->philos[vars->x].nb_eat < vars->nb_of_eat)
+		if (vars->philos[vars->x].st == 0)
 			c = 1;
-		if (((vars->philos[vars->x].last_eat + vars->time_to_die) < (c_t()))
+		if (((vars->philos[vars->x].last_eat + vars->t_die) < (c_t()))
 			|| (c == 0 && vars->nb_of_eat != -1))
 		{
 			action(vars, c);

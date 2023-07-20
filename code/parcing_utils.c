@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:20:58 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 05:20:03 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 22:32:23 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,55 @@
 int	read_input(t_vars *vars, char **av)
 {
 	vars->j = 0;
-	vars->nb_of_eat = -1;
+	vars->nb_of_eat = INT_MAX;
 	while (av[++vars->j])
 	{
 		vars->i = -1;
 		while (av[vars->j][++vars->i])
-		{
 			if (!ft_isdigit(av[vars->j][vars->i]))
 				return (0);
-		}
 		if (vars->j == 1)
 			vars->n_philo = ft_atoi(av[1]);
 		else if (vars->j == 2)
-			vars->time_to_die = ft_atoi(av[2]);
+			vars->t_die = ft_atoi(av[2]);
 		else if (vars->j == 3)
-			vars->time_to_eat = ft_atoi(av[3]);
+			vars->t_eat = ft_atoi(av[3]);
 		else if (vars->j == 4)
-			vars->time_to_sleep = ft_atoi(av[4]);
+			vars->t_sleep = ft_atoi(av[4]);
 		else if (vars->j == 5)
 			vars->nb_of_eat = ft_atoi(av[5]);
 	}
+	if (vars->t_die <= 0 || vars->t_eat <= 0 || vars->t_sleep <= 0
+		|| vars->n_philo <= 0 || vars->nb_of_eat <= 0 || vars->n_philo > 200)
+		return (0);
+	if (vars->nb_of_eat == INT_MAX)
+		vars->nb_of_eat = -1;
 	return (init_data(vars));
 }
 
 int	init_data(t_vars *vars)
 {
-	if (vars->n_philo <= 0 || vars->nb_of_eat == 0 || vars->n_philo > 200)
-		return (0);
 	vars->philos = malloc(sizeof(t_philo) * vars->n_philo);
+	if (!vars->philos)
+		return (0);
 	vars->fork_mutex = malloc(sizeof(pthread_mutex_t) * vars->n_philo);
+	if (!vars->fork_mutex)
+		return (free(vars->philos), 0);
 	vars->x = -1;
 	while (++vars->x < vars->n_philo)
 		pthread_mutex_init(&vars->fork_mutex[vars->x], NULL);
 	pthread_mutex_init(&vars->mutex, NULL);
 	pthread_mutex_init(&vars->print, NULL);
 	pthread_mutex_init(&vars->death, NULL);
-	vars->x = 0;
-	while (vars->x < vars->n_philo)
+	vars->x = -1;
+	while (++vars->x < vars->n_philo)
 	{
 		vars->philos[vars->x].data = vars;
 		vars->philos[vars->x].id = vars->x + 1;
 		vars->philos[vars->x].nb_eat = 0;
+		vars->philos[vars->x].st = 0;
 		vars->state = 1;
 		vars->philos[vars->x].last_eat = c_t();
-		vars->x++;
 	}
 	vars->s_t = c_t();
 	return (1);
@@ -104,6 +109,10 @@ int	ft_atoi(const char *str)
 	else if (str[i] == '+')
 		i++;
 	while (str[i] && ft_isdigit(str[i]))
+	{
 		re = re * 10 + (str[i++] - 48);
+		if ((re * si) < -2147483648 || (re * si) > 2147483647)
+			return (0);
+	}
 	return (re * si);
 }
