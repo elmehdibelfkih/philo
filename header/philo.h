@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 03:03:04 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 04:09:46 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ unsigned long long	c_t(void);
 int					creat_philos(t_vars *vars);
 int					ft_usleep(unsigned int t, t_vars *vars);
 void				*routine(void *arg);
-void				mu_lock(int lu, int id, t_vars *vars);
+void				f_lock(int lu, int id, t_vars *vars);
 void				m_free(t_vars *vars);
 int					eat(t_philo *p);
 int					join_philos(t_vars *vars);

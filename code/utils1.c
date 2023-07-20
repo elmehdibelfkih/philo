@@ -6,38 +6,67 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:23:50 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 03:02:28 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 04:16:59 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
 
-int	ft_isdigit(int c)
+unsigned long long	c_t(void)
 {
-	if (c <= '9' && c >= '0')
-		return (c);
-	return (0);
+	long long		t;
+	struct timeval	cu_time;
+
+	gettimeofday(&cu_time, NULL);
+	t = cu_time.tv_sec * 1000 + cu_time.tv_usec / 1000;
+	return (t);
 }
 
-int	ft_atoi(const char *str)
+int	ft_usleep(unsigned int t, t_vars *vars)
 {
-	size_t		i;
-	int			si;
-	long long	re;
+	unsigned long long	tt;
+	short int			i;
 
-	i = 0;
-	re = 0;
-	si = 1;
-	while (str[i] == ' ' || (9 <= str[i] && str[i] <= 13))
-		i++;
-	if (str[i] == '-' )
-	{		
-		si = -1;
-		i++;
+	tt = c_t();
+	while (c_t() < tt + t)
+	{
+		pthread_mutex_lock(&vars->death);
+		i = vars->state;
+		pthread_mutex_unlock(&vars->death);
+		if (i == 0)
+			return (0);
+		usleep(50);
 	}
-	else if (str[i] == '+')
-		i++;
-	while (str[i] && ft_isdigit(str[i]))
-		re = re * 10 + (str[i++] - 48);
-	return (re * si);
+	return (1);
+}
+
+int	creat_philos(t_vars *vars)
+{
+	short int	i;
+
+	i = -1;
+	while (++i < vars->n_philo)
+		pthread_create(&vars->philos[i].philo, NULL,
+			&routine, &vars->philos[i]);
+	return (1);
+}
+
+int	join_philos(t_vars *vars)
+{
+	short int	i;
+
+	i = -1;
+	while (++i < vars->n_philo)
+		pthread_join(vars->philos[i].philo, NULL);
+	return (1);
+}
+
+void	m_free(t_vars *vars)
+{
+	vars->x = -1;
+	while (++vars->x < vars->n_philo)
+		pthread_mutex_destroy(&vars->fork_mutex[vars->x]);
+	free (vars->philos);
+	free (vars->fork_mutex);
+	vars->x = -1;
 }

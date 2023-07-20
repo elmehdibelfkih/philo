@@ -6,7 +6,7 @@
 #    By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 03:53:38 by ebelfkih          #+#    #+#              #
-#    Updated: 2023/07/20 03:03:58 by ebelfkih         ###   ########.fr        #
+#    Updated: 2023/07/20 05:38:25 by ebelfkih         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,10 @@ NAME = philo
 ONAME = functions.a 
 MAIN = main/philo.c
 
-CC = cc -Wall -Werror -Wextra  
-#-fsanitize=thread
+CC = cc -Wall -Werror -Wextra  -fsanitize=thread
 RM = @rm -f
 AR = @ar rc
-FILES = main/philo.c code/parcing.c code/utils1.c 
+FILES = main/philo.c code/parcing_utils.c code/utils1.c 
 OBJ = $(FILES:.c=.o) 
 
 RED = \033[0;31m

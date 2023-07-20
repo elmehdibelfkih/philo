@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parcing.c                                          :+:      :+:    :+:   */
+/*   parcing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:20:58 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 03:10:43 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 05:20:03 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	init_data(t_vars *vars)
 		pthread_mutex_init(&vars->fork_mutex[vars->x], NULL);
 	pthread_mutex_init(&vars->mutex, NULL);
 	pthread_mutex_init(&vars->print, NULL);
+	pthread_mutex_init(&vars->death, NULL);
 	vars->x = 0;
 	while (vars->x < vars->n_philo)
 	{
@@ -63,7 +64,7 @@ int	init_data(t_vars *vars)
 	return (1);
 }
 
-void	mu_lock(int lu, int id, t_vars *vars)
+void	f_lock(int lu, int id, t_vars *vars)
 {
 	if (lu == 1)
 	{
@@ -75,4 +76,34 @@ void	mu_lock(int lu, int id, t_vars *vars)
 		pthread_mutex_unlock(&vars->fork_mutex[id - 1]);
 		pthread_mutex_unlock(&vars->fork_mutex[id % vars->n_philo]);
 	}
+}
+
+int	ft_isdigit(int c)
+{
+	if (c <= '9' && c >= '0')
+		return (c);
+	return (0);
+}
+
+int	ft_atoi(const char *str)
+{
+	size_t		i;
+	int			si;
+	long long	re;
+
+	i = 0;
+	re = 0;
+	si = 1;
+	while (str[i] == ' ' || (9 <= str[i] && str[i] <= 13))
+		i++;
+	if (str[i] == '-' )
+	{		
+		si = -1;
+		i++;
+	}
+	else if (str[i] == '+')
+		i++;
+	while (str[i] && ft_isdigit(str[i]))
+		re = re * 10 + (str[i++] - 48);
+	return (re * si);
 }
