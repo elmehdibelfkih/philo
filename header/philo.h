@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 04:09:46 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 06:03:13 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ void				f_lock(int lu, int id, t_vars *vars);
 void				m_free(t_vars *vars);
 int					eat(t_philo *p);
 int					join_philos(t_vars *vars);
+void				action(t_vars *vars, int c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:58:52 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 05:38:03 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/20 06:05:02 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void	*routine(void *arg)
 	p = &(*(t_philo *)arg);
 	if (!(p->id % 2))
 		ft_usleep(100, p->data);
-	pthread_mutex_lock(&p->data->death);
-		i = p->data->state;
-	pthread_mutex_unlock(&p->data->death);
+	i = 1;
 	while (i)
 	{
 		pthread_mutex_lock(&p->data->death);
@@ -78,25 +76,31 @@ int	who_died(t_vars *vars)
 		pthread_mutex_lock(&vars->mutex);
 		if (vars->philos[vars->x].nb_eat < vars->nb_of_eat)
 			c = 1;
-		if (((vars->philos[vars->x].last_eat + vars->time_to_die) <= (c_t()))
+		if (((vars->philos[vars->x].last_eat + vars->time_to_die) < (c_t()))
 			|| (c == 0 && vars->nb_of_eat != -1))
 		{
-			pthread_mutex_lock(&vars->death);
-				vars->state = 0;
-			pthread_mutex_unlock(&vars->death);
-			pthread_mutex_unlock(&vars->mutex);
-			join_philos(vars);
-			pthread_mutex_lock(&vars->print);
-			if (!(c == 0 && vars->nb_of_eat != -1))
-				printf("%lld philo %d died\n", c_t() - vars->s_t, vars->philos[vars->x].id);
-			pthread_mutex_unlock(&vars->print);
-			pthread_mutex_unlock(&vars->mutex);
+			action(vars, c);
 			return (0);
 		}
 		pthread_mutex_unlock(&vars->mutex);
 		vars->x++;
 	}
 	return (1);
+}
+
+void	action(t_vars *vars, int c)
+{
+	pthread_mutex_lock(&vars->death);
+		vars->state = 0;
+	pthread_mutex_unlock(&vars->death);
+	pthread_mutex_unlock(&vars->mutex);
+	join_philos(vars);
+	pthread_mutex_lock(&vars->print);
+	if (!(c == 0 && vars->nb_of_eat != -1))
+		printf("%lld philo %d died\n", c_t() - vars->s_t,
+			vars->philos[vars->x].id);
+	pthread_mutex_unlock(&vars->print);
+	return ;
 }
 
 int	main(int ac, char **av)
