@@ -6,15 +6,14 @@
 #    By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 03:53:38 by ebelfkih          #+#    #+#              #
-#    Updated: 2023/07/20 22:40:37 by ebelfkih         ###   ########.fr        #
+#    Updated: 2023/07/21 04:34:44 by ebelfkih         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 ONAME = functions.a 
 MAIN = main/philo.c
-
-CC = cc -Wall -Werror -Wextra
+CC = cc -Wall -Werror -Wextra -fsanitize=thread
 RM = @rm -f
 AR = @ar rc
 FILES = main/philo.c code/parcing_utils.c code/utils1.c 

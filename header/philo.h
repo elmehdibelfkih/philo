@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:55:22 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 22:31:54 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/21 04:40:24 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_philo
 {
 	short int		id;
 	short int		st;
+	short int		lp;
 	long long		last_eat;
 	int				nb_eat;
 	pthread_t		philo;
@@ -58,13 +59,13 @@ int					ft_atoi(const char *str);
 int					read_input(t_vars *vars, char **av);
 int					init_data(t_vars *vars);
 unsigned long long	c_t(void);
-int					creat_philos(t_vars *vars);
 int					ft_usleep(unsigned int t, t_vars *vars);
 void				*routine(void *arg);
 void				f_lock(int lu, int id, t_vars *vars);
 void				m_free(t_vars *vars);
 int					eat(t_philo *p);
-int					join_philos(t_vars *vars);
+int					creat_join_philos(t_vars *vars, int i);
 void				action(t_vars *vars, int c);
+void				one_philo(t_vars *vars);
 
 #endif

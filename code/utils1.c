@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:23:50 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/20 21:27:13 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/07/21 04:37:29 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,34 @@ int	ft_usleep(unsigned int t, t_vars *vars)
 	return (1);
 }
 
-int	creat_philos(t_vars *vars)
+int	creat_join_philos(t_vars *vars, int j)
 {
 	short int	i;
 
 	i = -1;
-	while (++i < vars->n_philo)
-		pthread_create(&vars->philos[i].philo, NULL,
-			&routine, &vars->philos[i]);
-	return (1);
+	if (j == 0)
+	{
+		while (++i < vars->n_philo)
+			pthread_create(&vars->philos[i].philo, NULL,
+				&routine, &vars->philos[i]);
+		return (1);
+	}
+	else
+	{
+		while (++i < vars->n_philo)
+			pthread_join(vars->philos[i].philo, NULL);
+		return (1);
+	}
 }
 
-int	join_philos(t_vars *vars)
+void	one_philo(t_vars *vars)
 {
-	short int	i;
-
-	i = -1;
-	while (++i < vars->n_philo)
-		pthread_join(vars->philos[i].philo, NULL);
-	return (1);
+	pthread_mutex_lock(&vars->print);
+	printf("%lld philo %d has taken a fork\n", (c_t() - vars->s_t),
+		vars->philos[0].id);
+	pthread_mutex_unlock(&vars->print);
+	if (ft_usleep(vars->t_die, vars) == 0)
+		return ;
 }
 
 void	m_free(t_vars *vars)
