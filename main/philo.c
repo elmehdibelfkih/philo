@@ -6,7 +6,7 @@
 /*   By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:58:52 by ebelfkih          #+#    #+#             */
-/*   Updated: 2023/07/21 05:13:29 by ebelfkih         ###   ########.fr       */
+/*   Updated: 2023/08/07 18:49:00 by ebelfkih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	eat(t_philo *p)
 	pthread_mutex_lock(&p->data->death);
 	if (p->data->state == 0)
 		return (pthread_mutex_unlock(&p->data->death),
-			pthread_mutex_unlock(&p->data->print), 0);
+			pthread_mutex_unlock(&p->data->print),f_lock(1, p->id, p->data), 0);
 	pthread_mutex_unlock(&p->data->death);
 	printf("%lld philo %d has taken a fork\n", (c_t() - p->data->s_t), p->id);
 	printf("%lld philo %d has taken a fork\n", (c_t() - p->data->s_t), p->id);

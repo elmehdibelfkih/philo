@@ -6,7 +6,7 @@
 #    By: ebelfkih <ebelfkih@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/06 03:53:38 by ebelfkih          #+#    #+#              #
-#    Updated: 2023/07/21 04:34:44 by ebelfkih         ###   ########.fr        #
+#    Updated: 2023/08/11 05:41:13 by ebelfkih         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,6 @@ PURPLE = \033[0;35m
 all : $(ONAME) $(NAME)
 	@echo "${GREEN} archive files are created"
 	@echo "${PURPLE} executable files are created"
-	@echo "${PURPLE} bonus executable file is created"
 
 $(NAME) : $(ONAME)
 	$(CC) $(MAIN) $(ONAME) -o $(NAME)
@@ -56,4 +55,4 @@ fclean: clean
 
 re: fclean all 
 
-.PHONY: clean fclean re bonus all mandatory
+.PHONY: clean fclean re  all mandatory
